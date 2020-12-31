@@ -462,7 +462,11 @@ def fix_cmd(argv):
         sys.exit(1)
 
     if len(migrations) == 0:
-        os.rename(outname, outbag_filename)
+        try:
+            os.rename(outname, outbag_filename)
+        except WindowsError:
+            os.remove(outbag_filename)
+            os.rename(outname, outbag_filename)
         print('Bag migrated successfully.')
     else:
         print('Bag could not be migrated.  The following migrations could not be performed:')
